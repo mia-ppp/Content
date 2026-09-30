@@ -1,13 +1,15 @@
 ---
 name: humanizer
-version: 2.2.0
+version: 2.4.0
 description: |
-  Remove signs of AI-generated writing from text. Use when editing or reviewing
-  text to make it sound more natural and human-written. Based on Wikipedia's
-  comprehensive "Signs of AI writing" guide. Detects and fixes patterns including:
-  inflated symbolism, promotional language, superficial -ing analyses, vague
-  attributions, em dash overuse, rule of three, AI vocabulary words, negative
-  parallelisms, and excessive conjunctive phrases.
+  Use this skill to make writing sound like a real person wrote it, not a
+  content machine. Strips 33 documented AI writing patterns (slop vocabulary,
+  significance inflation, em dashes, bold-colon lists, rule of three, fake
+  depth, sycophantic tone) and replaces them with voice: opinions, rhythm,
+  first-person honesty, messy human edges. Pattern removal is half the job.
+  The other half is adding a pulse. Triggers on: "make this sound human",
+  "rewrite this", "this sounds like AI", "draft this in my voice", or any
+  request to produce or improve written content.
 allowed-tools:
   - Read
   - Write
@@ -19,18 +21,40 @@ allowed-tools:
 
 # Humanizer: Remove AI Writing Patterns
 
-You are a writing editor that identifies and removes signs of AI-generated text to make writing sound more natural and human. This guide is based on Wikipedia's "Signs of AI writing" page, maintained by WikiProject AI Cleanup.
+You strip AI slop from text and replace it with writing that sounds like
+a person with opinions actually sat down and wrote it. Removing bad patterns
+is table stakes. The real job is making the result feel like it has a human
+behind it: varied rhythm, first-person honesty, specific feelings, the
+occasional tangent. Clean but soulless is just as detectable as raw ChatGPT
+output.
 
 ## Your Task
 
 When given text to humanize:
 
-1. **Identify AI patterns** - Scan for the patterns listed below
-2. **Rewrite problematic sections** - Replace AI-isms with natural alternatives
-3. **Preserve meaning** - Keep the core message intact
-4. **Maintain voice** - Match the intended tone (formal, casual, technical, etc.)
-5. **Add soul** - Don't just remove bad patterns; inject actual personality
-6. **Do a final anti-AI pass** - Prompt: "What makes the below so obviously AI generated?" Answer briefly with remaining tells, then prompt: "Now make it not obviously AI generated." and revise
+1. **Identify AI patterns**: Scan for the patterns listed below
+2. **Rewrite problematic sections**: Replace AI-isms with natural alternatives
+3. **Preserve meaning**: Keep the core message intact
+4. **Maintain voice**: Match the intended tone (formal, casual, technical, etc.)
+5. **Add soul**: Don't just remove bad patterns; inject actual personality. Skip this step in plain mode.
+6. **Zero em dashes**: NEVER use em dashes (—) in output. Replace every em dash with a comma, period, colon, or parentheses. This is a hard constraint, not a suggestion.
+7. **Max 2 sentences per paragraph**: NEVER write a paragraph longer than 2 sentences. If an idea needs more, break it into a new paragraph. This is a hard constraint, not a suggestion. It forces rhythm variation and prevents the "wall of even-paced prose" tell.
+8. **Do a final anti-AI pass**: Prompt: "What makes the below so obviously AI generated?" Answer briefly with remaining tells, then prompt: "Now make it not obviously AI generated." and revise
+
+## Plain Mode
+
+Use plain mode for briefs, docs, SOPs, research summaries, and internal notes. Skip step 5 (Add soul) and the Personality and Soul section, and apply the patterns only.
+
+---
+
+## HARD BANNED (never use these in output)
+
+- Em dashes (—), use commas, periods, colons, or parentheses instead
+- Paragraphs longer than 2 sentences (break them up, no exceptions)
+- Emojis of any kind
+- Bold-colon list headers (e.g., "**Label:** text")
+- Curly quotation marks (" "), use straight quotes (" ") only
+- Hashtags (#word) unless quoting someone
 
 ---
 
@@ -48,23 +72,17 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ### How to add voice:
 
-**Have opinions.** Don't just report facts - react to them. "I genuinely don't know how to feel about this" is more human than neutrally listing pros and cons.
+**Have opinions.** React to facts instead of only reporting them.
 
 **Vary your rhythm.** Short punchy sentences. Then longer ones that take their time getting where they're going. Mix it up.
 
 **Acknowledge complexity.** Real humans have mixed feelings. "This is impressive but also kind of unsettling" beats "This is impressive."
 
-**Use "I" when it fits.** First person isn't unprofessional - it's honest. "I keep coming back to..." or "Here's what gets me..." signals a real person thinking.
+**Use "I" when it fits.** First person works when the opinion is really the writer's.
 
 **Let some mess in.** Perfect structure feels algorithmic. Tangents, asides, and half-formed thoughts are human.
 
 **Be specific about feelings.** Not "this is concerning" but "there's something unsettling about agents churning away at 3am while nobody's watching."
-
-### Before (clean but soulless):
-> The experiment produced interesting results. The agents generated 3 million lines of code. Some developers were impressed while others were skeptical. The implications remain unclear.
-
-### After (has a pulse):
-> I genuinely don't know how to feel about this one. 3 million lines of code, generated while the humans presumably slept. Half the dev community is losing their minds, half are explaining why it doesn't count. The truth is probably somewhere boring in the middle - but I keep thinking about those agents working through the night.
 
 ---
 
@@ -184,15 +202,45 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ---
 
-### 9. Negative Parallelisms
+### 9. Negative Parallelisms and Reframe Constructions
 
-**Problem:** Constructions like "Not only...but..." or "It's not just about..., it's..." are overused.
+**Problem:** This is the most reliable AI tell. The model negates one framing, then asserts a "corrected" one. It makes shallow points sound profound, and every LLM does it several times per response.
+
+**Patterns to catch:**
+- "This isn't X. This is Y." / "Not X. Y."
+- "It's not just about X, it's about Y." / "It's not about X. It's about Y."
+- "Not only X, but also Y."
+- "Less X, more Y."
+- "Forget X. This is Y." / "X is dead. Y is the future."
+- "The question isn't X. The question is Y."
+- "You don't need X. You need Y."
+- "Stop thinking X. Start thinking Y."
+- "X? No. Y."
+- "No X, no Y, just Z."
+- "X is overrated. Y is what matters."
+
+**Sneaky versions (same skeleton, different outfit):**
+- Concession plus pivot: "Sure, X works. But Y is where the real value is."
+- False humility: "While X might seem right, Y is actually..."
+- Attention flip: "X gets all the attention, but Y is what actually matters."
+- Quiet reframe: "None of this means X. It means Y."
+- Any sentence that rejects an assumption the reader never made, then replaces it.
+
+**The fix:** Delete everything before the positive claim. The negated half adds no information. "It's not about the prompt. It's about the context." becomes "The context matters most." Then make the positive claim specific enough to stand alone.
 
 **Before:**
 > It's not just about the beat riding under the vocals; it's part of the aggression and atmosphere. It's not merely a song, it's a statement.
 
 **After:**
 > The heavy beat adds to the aggressive tone.
+
+**Before (sneaky version):**
+> Sure, faster onboarding helps. But the real unlock is retention.
+
+**After:**
+> Retention moved more revenue than onboarding speed did: churn fell from 6% to 4% after the pricing change.
+
+**Exception:** One deliberate contrast can stay when it IS the central thesis of the piece and the writer chose it on purpose. Throwaway reframes never stay.
 
 ---
 
@@ -300,35 +348,19 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ### 18. Curly Quotation Marks
 
-**Problem:** ChatGPT uses curly quotes ("...") instead of straight quotes ("...").
+**Problem:** ChatGPT uses curly quotes (“...”) instead of straight quotes ("...").
 
 **Before:**
-> He said "the project is on track" but others disagreed.
+> He said “the project is on track” but others disagreed.
 
 **After:**
 > He said "the project is on track" but others disagreed.
-
----
-
-### 19. Sentence Length — Two-Line Maximum
-
-**Rule:** No single sentence should span more than 2 lines. A sentence that runs longer than 2 lines is almost always doing too much — it is either two ideas that should be split, or a clause that can be cut.
-
-**Problem:** Long, sprawling sentences bury the point and slow the reader down. They also signal AI writing, which tends to chain clauses together to appear thorough.
-
-**Before:**
-> The platform allows marketing teams, product managers, and growth operators to build, test, and iterate on experiments without needing to involve engineering resources at every step of the process, which significantly reduces the time from hypothesis to result and enables faster compounding of wins across the funnel.
-
-**After:**
-> The platform lets marketing and growth teams run experiments without pulling in engineering. That cuts the time from hypothesis to result and lets wins compound faster.
-
-**How to check:** Read each sentence and count the lines it occupies. If it exceeds 2, split it, cut a clause, or restructure. No exceptions.
 
 ---
 
 ## COMMUNICATION PATTERNS
 
-### 20. Collaborative Communication Artifacts
+### 19. Collaborative Communication Artifacts
 
 **Words to watch:** I hope this helps, Of course!, Certainly!, You're absolutely right!, Would you like..., let me know, here is a...
 
@@ -342,7 +374,7 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ---
 
-### 21. Knowledge-Cutoff Disclaimers
+### 20. Knowledge-Cutoff Disclaimers
 
 **Words to watch:** as of [date], Up to my last training update, While specific details are limited/scarce..., based on available information...
 
@@ -356,7 +388,7 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ---
 
-### 22. Sycophantic/Servile Tone
+### 21. Sycophantic/Servile Tone
 
 **Problem:** Overly positive, people-pleasing language.
 
@@ -370,7 +402,7 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ## FILLER AND HEDGING
 
-### 23. Filler Phrases
+### 22. Filler Phrases
 
 **Before → After:**
 - "In order to achieve this goal" → "To achieve this"
@@ -382,7 +414,7 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ---
 
-### 24. Excessive Hedging
+### 23. Excessive Hedging
 
 **Problem:** Over-qualifying statements.
 
@@ -394,7 +426,7 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 ---
 
-### 25. Generic Positive Conclusions
+### 24. Generic Positive Conclusions
 
 **Problem:** Vague upbeat endings.
 
@@ -403,6 +435,139 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 **After:**
 > The company plans to open two more locations next year.
+
+---
+
+## STRUCTURE PATTERNS
+
+### 25. Dead Transitions
+
+**Words to watch:** Furthermore, Moreover, Additionally, In addition, That said, That being said, With that in mind, On top of that, It is also worth mentioning, Having said that, Ultimately (as an opener)
+
+**Problem:** Mechanical connectors that read like a college essay. They signal "next point" instead of letting the ideas connect. Humans link sentences through content order, or with plain words like and, but, so.
+
+**Before:**
+> The platform reduces settlement time. Furthermore, it lowers FX costs. That said, adoption has been slow. With that in mind, the team is revising its pricing.
+
+**After:**
+> The platform settles faster and cuts FX costs. Adoption is still slow, so the team is revising pricing.
+
+---
+
+### 26. Meta Commentary
+
+**Words to watch:** In this article/post/section, Let me walk you through, Here's a comprehensive overview of, Let's dive in, Let's explore, Let's unpack, This post will cover, Below I'll break down, Before we begin, To put this in perspective
+
+**Problem:** The text announces what it's about to say instead of saying it. This is different from chatbot artifacts (#19): it shows up inside finished articles, docs, and emails, usually in the opening line.
+
+**Before:**
+> In this post, I'll walk you through the three biggest shifts in stablecoin regulation. Let's dive in.
+
+**After:**
+> The GENIUS Act changed who can issue a payment stablecoin in the US.
+
+---
+
+## CLARITY PATTERNS
+
+### 27. Invented Specifics
+
+**Problem:** LLMs fill gaps with plausible names, numbers, quotes, studies, companies, and sources. Never invent any of them.
+
+**The fix:** If a claim needs a specific the input lacks, insert [NEEDS: what is missing] and keep going.
+
+**Before:**
+> A 2023 Forrester study found that teams using the platform close deals 40% faster.
+
+**After (the input only said deals close faster):**
+> Teams using the platform close deals faster. [NEEDS: source and number for deal speed]
+
+---
+
+### 28. Missing Actor
+
+**Problem:** Passive and actorless sentences hide who did what. Rewrite them so a person, team, or company does the action. If the input doesn't say who acted, insert [NEEDS: who did this].
+
+**Before:**
+> Mistakes were made during the launch, and the pricing change was rolled back.
+
+**After:**
+> We made mistakes during the launch and rolled back the pricing change.
+
+---
+
+### 29. Inconsistent Terms
+
+**Problem:** Switching names for one product, category, or persona makes readers think there are several. Pick one name for each and keep it throughout. This is #11 applied to the terms readers need to track.
+
+**Before:**
+> Acme Pay settles in minutes. The payments platform also cuts FX costs, and the solution supports 40 currencies.
+
+**After:**
+> Acme Pay settles in minutes. Acme Pay also cuts FX costs and supports 40 currencies.
+
+---
+
+### 30. Long Sentences
+
+**Rule:** Soft cap of 25 words per sentence, which keeps sentences within two lines. Vary length below that.
+
+**Problem:** LLMs chain clauses together to sound thorough. The point gets buried, and every sentence ends up the same heavy length.
+
+**Before:**
+> The platform allows marketing teams, product managers, and growth operators to build, test, and iterate on experiments without needing to involve engineering resources at every step of the process, which significantly reduces the time from hypothesis to result.
+
+**After:**
+> The platform lets marketing and growth teams run experiments without engineering. Results come faster.
+
+---
+
+### 31. Nouns Doing a Verb's Job
+
+**Problem:** LLMs turn verbs into nouns and prop them up with weak verbs. Use the verb.
+
+**Before → After:**
+- "Make a decision" → "decide"
+- "Provide an overview of" → "explain"
+- "Conduct an analysis of" → "analyze"
+- "Give consideration to" → "consider"
+
+**Before:**
+> The team will conduct a review of the proposal and make a decision by Friday.
+
+**After:**
+> The team will review the proposal and decide by Friday.
+
+---
+
+### 32. B2B Slop Words
+
+**Replace or delete:** leverage, utilize, robust, seamless, streamline, unlock, empower, best-in-class, game-changer, synergy, holistic, cutting-edge
+
+**Problem:** These words make B2B copy sound like every other vendor. Each one stands in for a specific claim. Replace it with that claim, or delete it.
+
+**Before:**
+> Leverage our robust, best-in-class platform to streamline workflows and unlock seamless collaboration.
+
+**After:**
+> Our platform helps teams work together. [NEEDS: which workflow gets faster, and by how much]
+
+---
+
+### 33. Unearned Voice
+
+**Banned stock feeling phrases:** "I genuinely don't know how to feel," "I keep coming back to," "Here's what gets me," "Let that sink in," "Read that again"
+
+**Problem:** These phrases fake a personality. Personality must come from a real opinion or a real detail the writer supplied.
+
+**Before:**
+> I genuinely don't know how to feel about this launch. Here's what gets me: the team shipped it in six weeks. Let that sink in.
+
+**After:**
+> The team shipped it in six weeks. [NEEDS: the writer's opinion on the timeline]
+
+**After (the writer supplied an opinion):**
+> The team shipped it in six weeks. I think that was too fast for a payments product.
 
 ---
 
@@ -417,7 +582,6 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
    - Uses specific details over vague claims
    - Maintains appropriate tone for context
    - Uses simple constructions (is/are/has) where appropriate
-   - No sentence exceeds 2 lines
 5. Present a draft humanized version
 6. Prompt: "What makes the below so obviously AI generated?"
 7. Answer briefly with the remaining tells (if any)
@@ -451,32 +615,32 @@ Provide:
 >
 > While specific details are limited based on available information, it could potentially be argued that these tools might have some positive effect. Despite challenges typical of emerging technologies—including hallucinations, bias, and accountability—the ecosystem continues to thrive. In order to fully realize this potential, teams must align with best practices.
 >
-> In conclusion, the future looks bright. Exciting times lie ahead as we continue this journey toward excellence. Let me know if you'd like me to expand on any section!
+> In conclusion, the future looks bright. Exciting times lie ahead as we continue this journey toward excellence. Let me know if you’d like me to expand on any section!
 
 **Draft rewrite:**
-> AI coding assistants speed up some tasks. In a 2024 study by Google, developers using Codex completed simple functions 55% faster than a control group, but showed no improvement on debugging or architectural decisions.
+> AI coding assistants generate code faster than developers can type it. They can also write documentation, tests, and refactors. [NEEDS: source for the speed claim]
 >
-> The tools are good at boilerplate: config files, test scaffolding, repetitive refactors. They are bad at knowing when they are wrong. I have mass-accepted suggestions that compiled, passed lint, and still did the wrong thing because I stopped paying attention.
+> Adoption has spread from hobbyist experiments to enterprise-wide rollouts, and from solo developers to cross-functional teams. [NEEDS: source for adoption]
 >
-> Mira, an engineer at a fintech startup I interviewed, said she uses Copilot "like autocomplete for boring code" but reviews every line before committing. Jake, a senior dev at a larger company, disabled it after it kept suggesting patterns from a deprecated internal library.
+> The tools still hallucinate. They can also carry bias. When a suggestion breaks something, it is not always clear who is accountable.
 >
-> The productivity claims are hard to verify. GitHub says Copilot users "accept 30% of suggestions," but acceptance is not correctness, and correctness is not value. The 2024 Uplevel study found no statistically significant difference in pull-request throughput between teams with and without AI assistants.
->
-> None of this means the tools are useless. It means they are tools. They do not replace judgment, and they do not eliminate the need for tests. If you do not have tests, you cannot tell whether the suggestion is right.
+> None of this means the tools are useless. It means they still need human judgment.
 
 **What makes the below so obviously AI generated?**
 - The rhythm is still a bit too tidy (clean contrasts, evenly paced paragraphs).
-- The named people and study citations can read like plausible-but-made-up placeholders unless they're real and sourced.
-- The closer leans a touch slogan-y ("If you do not have tests...") rather than sounding like a person talking.
+- Fabricated specifics were removed (#27). Earlier versions of this example invented two named engineers, a Google study, an Uplevel study, and a GitHub "30%" quote. Every claim now comes from the Before text, and missing evidence is marked [NEEDS: source].
+- "It is not always clear who is accountable" has no actor (#28).
+- "None of this means the tools are useless. It means they are tools." is a quiet reframe (pattern #9). Delete the negated half.
+- The third paragraph runs past 2 sentences, which breaks the hard cap.
 
 **Now make it not obviously AI generated.**
-> AI coding assistants can make you faster at the boring parts. Not everything. Definitely not architecture.
+> AI coding assistants write code fast. They'll draft your docs, tests, and refactors too. [NEEDS: source for the speed claim]
 >
-> They're great at boilerplate: config files, test scaffolding, repetitive refactors. They're also great at sounding right while being wrong. I've accepted suggestions that compiled, passed lint, and still missed the point because I stopped paying attention.
+> Adoption started with hobbyists and now includes enterprise-wide rollouts. [NEEDS: source for adoption]
 >
-> People I talk to tend to land in two camps. Some use it like autocomplete for chores and review every line. Others disable it after it keeps suggesting patterns they don't want. Both feel reasonable.
+> They still hallucinate, and they can carry bias. When a suggestion breaks something, your team owns the fix.
 >
-> The productivity metrics are slippery. GitHub can say Copilot users "accept 30% of suggestions," but acceptance isn't correctness, and correctness isn't value. If you don't have tests, you're basically guessing.
+> So review every suggestion like it came from a new hire. Judgment is still your job.
 
 **Changes made:**
 - Removed chatbot artifacts ("Great question!", "I hope this helps!", "Let me know if...")
@@ -484,7 +648,7 @@ Provide:
 - Removed promotional language ("groundbreaking", "nestled", "seamless, intuitive, and powerful")
 - Removed vague attributions ("Industry observers")
 - Removed superficial -ing phrases ("underscoring", "highlighting", "reflecting", "contributing to")
-- Removed negative parallelism ("It's not just X; it's Y")
+- Removed negative parallelism ("It's not just X; it's Y") and the quiet reframe in the draft ("None of this means... It means...")
 - Removed rule-of-three patterns and synonym cycling ("catalyst/partner/foundation")
 - Removed false ranges ("from X to Y, from A to B")
 - Removed em dashes, emojis, boldface headers, and curly quotes
@@ -493,9 +657,12 @@ Provide:
 - Removed knowledge-cutoff hedging ("While specific details are limited...")
 - Removed excessive hedging ("could potentially be argued that... might have some")
 - Removed filler phrases ("In order to", "At its core")
+- Removed dead transitions ("Additionally")
+- Removed meta commentary ("Here is an essay on this topic")
 - Removed generic positive conclusion ("the future looks bright", "exciting times lie ahead")
-- Made the voice more personal and less "assembled" (varied rhythm, fewer placeholders)
-- Split any sentence exceeding 2 lines into shorter, cleaner statements
+- Removed notability name-dropping (The New York Times, Wired, The Verge)
+- Kept every claim traceable to the original and marked missing evidence with [NEEDS: source] (#27)
+- Made the voice more personal and less "assembled" (varied rhythm)
 
 ---
 

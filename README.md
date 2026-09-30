@@ -10,7 +10,8 @@ Works with Claude Code, Cursor, Windsurf, and any agent that supports the Agent 
 
 | Skill | Description |
 |---|---|
-| `humanizer` | Strips AI writing patterns from any draft. Detects and removes 25 patterns including significance inflation, promotional language, vague attributions, em dash overuse, rule of three, and more. Rewrites for natural human voice with actual personality. |
+| `humanizer` | Strips AI writing patterns from any draft. Detects and removes 33 patterns including significance inflation, promotional language, vague attributions, em dash overuse, rule of three, invented specifics, and more. Rewrites for natural human voice with actual personality, or runs in plain mode for docs and briefs. |
+| `linkedin-writer` | LinkedIn and short-form social rules that layer on top of humanizer. Covers voice, hooks, engagement bait, reframe constructions, clarity rules, banned vocabulary, hashtags, and a final audit pass. |
 
 ---
 
@@ -20,16 +21,17 @@ Works with Claude Code, Cursor, Windsurf, and any agent that supports the Agent 
 
 Identifies and removes signs of AI-generated text based on Wikipedia's "Signs of AI writing" guide. Goes beyond pattern removal to inject actual voice and personality.
 
-**Patterns detected and fixed (25 total):**
+**Patterns detected and fixed (33 total):**
 
 | Category | Patterns |
 |---|---|
 | Content | Significance inflation, notability emphasis, superficial -ing phrases, promotional language, vague attributions, formulaic "Challenges" sections |
 | Language | AI vocabulary words, copula avoidance ("serves as"), negative parallelisms, rule of three, synonym cycling, false ranges |
 | Style | Em dash overuse, excessive boldface, inline-header lists, title case headings, emojis, curly quotes |
-| Sentence length | No sentence may span more than 2 lines — sentences that run longer are split or restructured |
 | Communication | Chatbot artifacts, knowledge-cutoff disclaimers, sycophantic tone |
 | Filler | Filler phrases, excessive hedging, generic positive conclusions |
+| Structure | Dead transitions, meta commentary |
+| Clarity | Invented specifics (marked [NEEDS: ...] instead), missing actors, inconsistent terms, sentences over 25 words, nouns doing a verb's job, B2B slop words, unearned voice |
 
 **Process:**
 1. Draft rewrite — all AI patterns removed, voice added
@@ -37,7 +39,17 @@ Identifies and removes signs of AI-generated text based on Wikipedia's "Signs of
 3. Final rewrite — revised after the audit
 4. Changes summary — list of everything fixed
 
+**Plain mode:** for briefs, docs, SOPs, research summaries, and internal notes, the skill applies the patterns only and skips adding voice.
+
 **Triggers:** "humanize this", "make this sound less AI", "remove AI patterns", "edit this copy", "clean up this draft"
+
+### `linkedin-writer`: LinkedIn Voice and Anti-AI Rules
+
+Tunes posts for LinkedIn and other short-form social. Apply humanizer first. Where the two conflict, linkedin-writer wins for social posts.
+
+Covers hooks, engagement bait, hype language, reframe constructions, clarity rules, tiered banned vocabulary, formatting, hashtags, and a final audit pass. It never invents specifics: it asks for them on topic-only requests and inserts [NEEDS: ...] placeholders in drafts with gaps.
+
+**Triggers:** "write a LinkedIn post", "edit this post", "tighten this hook", carousel copy, X/Twitter posts
 
 ---
 
@@ -66,7 +78,9 @@ git submodule add https://github.com/[your-username]/[your-repo].git .agents/wri
 
 ```
 skills/
-└── humanizer/
+├── humanizer/
+│   └── SKILL.md
+└── linkedin-writer/
     └── SKILL.md
 ```
 
@@ -85,6 +99,9 @@ Once installed, ask your agent to help with writing tasks:
 
 "Clean up this copy"
 → Uses humanizer skill
+
+"Write a LinkedIn post about our launch"
+→ Uses linkedin-writer skill (on top of humanizer)
 ```
 
 You can also invoke directly:
