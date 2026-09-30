@@ -11,7 +11,7 @@ Works with Claude Code, Cursor, Windsurf, and any agent that supports the Agent 
 | Skill | Description |
 |---|---|
 | `humanizer` | Strips AI writing patterns from any draft. Detects and removes 33 patterns including significance inflation, promotional language, vague attributions, em dash overuse, rule of three, invented specifics, and more. Rewrites for natural human voice with actual personality, or runs in plain mode for docs and briefs. |
-| `linkedin-writer` | LinkedIn and short-form social rules that layer on top of humanizer. Covers voice, hooks, engagement bait, reframe constructions, clarity rules, banned vocabulary, hashtags, and a final audit pass. |
+| `linkedin-writer` | LinkedIn and short-form social rules that layer on top of humanizer. Covers voice, hooks, engagement bait, reframe constructions, clarity rules, banned vocabulary, and a final audit pass. |
 
 ---
 
@@ -47,7 +47,7 @@ Identifies and removes signs of AI-generated text based on Wikipedia's "Signs of
 
 Tunes posts for LinkedIn and other short-form social. Apply humanizer first. Where the two conflict, linkedin-writer wins for social posts.
 
-Covers hooks, engagement bait, hype language, reframe constructions, clarity rules, tiered banned vocabulary, formatting, hashtags, and a final audit pass. It never invents specifics: it asks for them on topic-only requests and inserts [NEEDS: ...] placeholders in drafts with gaps.
+Covers hooks, engagement bait, hype language, reframe constructions, clarity rules, tiered banned vocabulary, formatting, and a final audit pass. It never invents specifics: it asks for them on topic-only requests and inserts [NEEDS: ...] placeholders in drafts with gaps.
 
 **Triggers:** "write a LinkedIn post", "edit this post", "tighten this hook", carousel copy, X/Twitter posts
 

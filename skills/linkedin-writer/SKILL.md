@@ -8,7 +8,7 @@ description: |
   "LinkedIn." Layers on top of the humanizer skill: apply humanizer first,
   then these rules win wherever the two conflict. Covers voice,
   hook formulas, engagement bait, reframe constructions, clarity rules,
-  curated banned vocabulary, hashtags, and a final audit pass.
+  curated banned vocabulary, and a final audit pass.
 ---
 
 # LinkedIn Writer
@@ -21,7 +21,6 @@ Read humanizer first and apply all of its patterns. Then apply this file. Where 
 
 ## Overrides to humanizer
 
-- **Hashtags allowed.** Humanizer bans them. Here, use a few targeted ones at the very end, never mid-post. Default set: #productmarketing #gtm #fintech #stablecoins #b2bsaas. Pick the ones that fit the post.
 - **Paragraphs.** Humanizer's 2-sentence cap still applies. On LinkedIn, 1 sentence per line is often better. Leave a blank line between every paragraph.
 
 ---
@@ -82,6 +81,7 @@ The first line has to earn the "see more" click with something concrete: a numbe
 - "Agree?" / "Thoughts?" as a closing line
 - "Comment X and I'll send you..." / "Repost to help..." / "Follow me for more"
 - "I genuinely don't know how to feel" / "I keep coming back to" / "Here's what gets me"
+- No hashtags.
 
 Personality must come from a real opinion or a real detail she supplied, never a stock feeling phrase.
 
@@ -140,7 +140,7 @@ In fintech these are often the precise term. "proprietary routing" or "transpare
 
 - **Hard rule:** invented specifics, engagement bait, banned hooks, hype language, outright-banned words, em dashes, extra reframes beyond the 1 allowed thesis.
 - **Strong tendency (most of the time):** 1 sentence per line, specific details, contractions, ending on the last real thought, the clarity rules.
-- **Light preference (context decides):** hashtag choice, parentheticals, arrow usage, post length.
+- **Light preference (context decides):** parentheticals, arrow usage, post length.
 
 ---
 
